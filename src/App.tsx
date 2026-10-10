@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { DemoClock } from "./DemoClock";
 import { NotificationsProvider } from "./NotificationsContext";
 import { ReminderField } from "./ReminderField";
+import { SystemNotificationsButton } from "./SystemNotificationsButton";
 import { createNote, loadNotes, saveNotes, sortNewestFirst, type Note } from "./notes";
 
 export function App() {
@@ -69,7 +70,7 @@ export function App() {
       </main>
       <footer className="footer">
         <div className="slot" data-slot="demo-clock"><DemoClock /></div>
-        <div className="slot" data-slot="system-notifications" />
+        <div className="slot" data-slot="system-notifications"><SystemNotificationsButton /></div>
       </footer>
     </div>
     </NotificationsProvider>
