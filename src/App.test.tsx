@@ -88,3 +88,26 @@ describe("clear all", () => {
     expect(screen.getByRole("button", { name: "Undo" })).toBeTruthy();
   });
 });
+
+describe("notes count footer", () => {
+  const count = () => document.querySelector(".notes-count")?.textContent;
+
+  it("updates on add, remove, clear all and undo", () => {
+    expect(count()).toBe("2 notes");
+    add("three");
+    expect(count()).toBe("3 notes");
+    fireEvent.click(screen.getByRole("button", { name: "Remove note: three" }));
+    fireEvent.click(screen.getByRole("button", { name: "Remove note: two" }));
+    expect(count()).toBe("1 note");
+    fireEvent.click(screen.getByRole("button", { name: "Clear all" }));
+    expect(count()).toBe("0 notes");
+    fireEvent.click(screen.getByRole("button", { name: "Undo" }));
+    expect(count()).toBe("1 note");
+  });
+
+  it("is 12px muted gray", () => {
+    const el = document.querySelector(".notes-count") as HTMLElement;
+    expect(el.style.fontSize).toBe("12px");
+    expect(el.style.color).toBe("rgb(136, 136, 136)");
+  });
+});

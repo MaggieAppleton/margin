@@ -56,6 +56,12 @@ export default function App() {
           </li>
         ))}
       </ul>
+      <p
+        className="notes-count"
+        style={{ fontSize: 12, color: "#888", margin: "0.5rem 0 0" }}
+      >
+        {notes.length} {notes.length === 1 ? "note" : "notes"}
+      </p>
       <button
         className="clear-all"
         disabled={notes.length === 0}
