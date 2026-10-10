@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { loadNotes, saveNotes, type Note } from "./notes";
+import { loadNotes, saveNotes, sortNotes, type Note } from "./notes";
 
 export default function App() {
   const [notes, setNotes] = useState<Note[]>(loadNotes);
@@ -10,9 +10,15 @@ export default function App() {
   function add() {
     const text = draft.trim();
     if (!text) return;
-    const note: Note = { id: crypto.randomUUID(), text, createdAt: Date.now() };
+    const note: Note = { id: crypto.randomUUID(), text, createdAt: Date.now(), pinned: false };
     setNotes((prev) => [note, ...prev]);
     setDraft("");
+  }
+
+  function toggle(id: string) {
+    setNotes((prev) =>
+      prev.map((n) => (n.id === id ? { ...n, pinned: !n.pinned } : n)),
+    );
   }
 
   return (
@@ -27,8 +33,14 @@ export default function App() {
         autoFocus
       />
       <ul>
-        {notes.map((n) => (
-          <li key={n.id}>{n.text}</li>
+        {sortNotes(notes).map((n) => (
+          <li key={n.id}>
+            <span>{n.text}</span>
+            {n.pinned && <span className="badge">Pinned</span>}
+            <button type="button" aria-pressed={n.pinned} onClick={() => toggle(n.id)}>
+              {n.pinned ? "Unpin" : "Pin"}
+            </button>
+          </li>
         ))}
       </ul>
     </main>
