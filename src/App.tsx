@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { ReminderField } from "./ReminderField";
 import { createNote, loadNotes, saveNotes, sortNewestFirst, type Note } from "./notes";
 
 export function App() {
@@ -51,6 +52,10 @@ export function App() {
                       rows={5}
                       value={note.body}
                       onChange={(e) => update(note.id, { body: e.target.value })}
+                    />
+                    <ReminderField
+                      remindAt={note.remindAt}
+                      onChange={(at) => update(note.id, { remindAt: at })}
                     />
                   </div>
                 )}
