@@ -32,11 +32,29 @@ export default function App() {
         />
       </section>
       <section aria-label="Notes">
-        <ul data-slot="notes-list">
-          {notes.map((n) => (
-            <li key={n.id}>{n.text}</li>
-          ))}
-        </ul>
+        {notes.length === 0 ? (
+          <div
+            data-slot="empty-state"
+            style={{
+              marginTop: 24,
+              padding: "40px 24px",
+              textAlign: "center",
+              border: "2px dashed #ccc",
+              borderRadius: 12,
+            }}
+          >
+            <h3 style={{ margin: "0 0 8px", fontSize: 20 }}>No notes yet</h3>
+            <p style={{ margin: 0, color: "#666" }}>
+              Type above and press Enter to add your first note.
+            </p>
+          </div>
+        ) : (
+          <ul data-slot="notes-list">
+            {notes.map((n) => (
+              <li key={n.id}>{n.text}</li>
+            ))}
+          </ul>
+        )}
       </section>
     </main>
   );
