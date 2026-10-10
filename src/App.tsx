@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { DemoClock } from "./DemoClock";
+import { NotificationsProvider } from "./NotificationsContext";
 import { ReminderField } from "./ReminderField";
 import { createNote, loadNotes, saveNotes, sortNewestFirst, type Note } from "./notes";
 
@@ -18,6 +20,7 @@ export function App() {
   };
 
   return (
+    <NotificationsProvider notes={notes} setNotes={setNotes}>
     <div className="app">
       <header className="header">
         <h1>Margin</h1>
@@ -65,9 +68,10 @@ export function App() {
         </ul>
       </main>
       <footer className="footer">
-        <div className="slot" data-slot="demo-clock" />
+        <div className="slot" data-slot="demo-clock"><DemoClock /></div>
         <div className="slot" data-slot="system-notifications" />
       </footer>
     </div>
+    </NotificationsProvider>
   );
 }

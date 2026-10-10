@@ -1,12 +1,14 @@
 import { useState } from "react";
+import { useNotifications } from "./NotificationsContext";
 import { PRESETS, formatResolved, parseReminder, presetTime } from "./reminderParse";
 
 type Props = { remindAt?: number | string; onChange: (at: number | undefined) => void };
 
 export function ReminderField({ remindAt, onChange }: Props) {
+  const { now } = useNotifications();
   const [text, setText] = useState("");
   const [confirming, setConfirming] = useState(false);
-  const parsed = parseReminder(text, Date.now());
+  const parsed = parseReminder(text, now());
   const current = remindAt === undefined ? undefined : new Date(remindAt).getTime();
 
   const commit = (at: number) => {
@@ -60,7 +62,7 @@ export function ReminderField({ remindAt, onChange }: Props) {
       )}
       <div className="chips">
         {PRESETS.map((p) => (
-          <button type="button" key={p.id} className="chip" onClick={() => commit(presetTime(p.id, Date.now()))}>
+          <button type="button" key={p.id} className="chip" onClick={() => commit(presetTime(p.id, now()))}>
             {p.label}
           </button>
         ))}
