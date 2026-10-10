@@ -39,3 +39,7 @@ export function makeId(): string {
   return globalThis.crypto?.randomUUID?.() ??
     `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`;
 }
+
+export function footerText(count: number): string {
+  return `${count} ${count === 1 ? "note" : "notes"}`;
+}

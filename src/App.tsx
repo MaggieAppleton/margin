@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { loadNotes, makeId, saveNotes, type Note } from "./notes";
+import { footerText, loadNotes, makeId, saveNotes, type Note } from "./notes";
 
 export default function App() {
   const [notes, setNotes] = useState<Note[]>(loadNotes);
@@ -39,6 +39,9 @@ export default function App() {
           </li>
         ))}
       </ul>
+      <footer style={{ color: "#6b7280", fontSize: 12 }}>
+        {footerText(notes.length)}
+      </footer>
     </main>
   );
 }
