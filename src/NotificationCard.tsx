@@ -11,7 +11,7 @@ export function NotificationCard({ note, onOpen, onAction }: Props) {
       <strong className="notif-title">{note.title || "Untitled"}</strong>
       {firstLine && <span className="notif-line">{firstLine}</span>}
       <div className="notif-actions">
-        <button type="button" onClick={() => { snooze(note.id, 15); onAction?.(); }}>Snooze 15 min</button>
+        <button type="button" onClick={() => { snooze(note.id, 10); onAction?.(); }}>Snooze 10 min</button>
         <button type="button" onClick={() => { done(note.id); onAction?.(); }}>Done</button>
         <button type="button" onClick={() => { onOpen(note.id); onAction?.(); }}>Open</button>
       </div>
