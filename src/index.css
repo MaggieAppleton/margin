@@ -1,0 +1,27 @@
+body {
+  margin: 0;
+  font: 16px system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+main {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+input {
+  width: 100%;
+  box-sizing: border-box;
+  font: inherit;
+  padding: 8px;
+}
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0;
+}
+li {
+  padding: 12px 0;
+}
+.muted {
+  color: #888;
+  font-size: 14px;
+}
