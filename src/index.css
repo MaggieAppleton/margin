@@ -1,0 +1,20 @@
+* { box-sizing: border-box; }
+body { margin: 0; font-family: system-ui, sans-serif; }
+.notes { max-width: 640px; margin: 0 auto; padding: 16px; }
+.notes-input {
+  display: block;
+  width: 100%;
+  height: 240px;
+  resize: none;
+  overflow-y: auto;
+  padding: 12px;
+  font: inherit;
+  font-size: 16px;
+}
+.word-badge {
+  margin: 6px 0 0;
+  text-align: right;
+  font-size: 13px;
+  color: #4b5563;
+  white-space: nowrap;
+}
