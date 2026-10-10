@@ -1,0 +1,36 @@
+body {
+  font: 16px/1.5 system-ui, sans-serif;
+  margin: 0;
+  background: #f6f5f2;
+  color: #222;
+}
+
+#root {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+  margin-bottom: 20px;
+  font: inherit;
+  border: 1px solid #bbb;
+  border-radius: 6px;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin-bottom: 8px;
+}
