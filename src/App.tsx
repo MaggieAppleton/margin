@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { ReminderSection } from "./reminders/ReminderSection";
 import { useNotes } from "./notes/useNotes";
 import { Notifications } from "./notifications/Notifications";
+import { SystemNotifications } from "./system-notifications/SystemNotifications";
 import { Footer } from "./scheduler/Footer";
 import { useScheduler } from "./scheduler/hooks";
 import "./App.css";
@@ -53,6 +54,7 @@ export default function App() {
         <h1>Margin</h1>
         <div className="header-actions">
           <Notifications part="bell" notes={notes} edit={edit} completeReminder={completeReminder} openNote={openNote} />
+          <SystemNotifications notes={notes} openNote={openNote} />
           <button onClick={() => setOpenId(create())}>New note</button>
         </div>
       </header>
