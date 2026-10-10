@@ -52,7 +52,7 @@ describe("in-app notifications", () => {
     openTray();
     expect(tray().getAllByTestId("notification")).toHaveLength(1);
     expect(tray().getByText("Note 0")).toBeTruthy();
-    for (const name of ["Snooze 15 min", "Done", "Open"])
+    for (const name of ["Snooze 5 min", "Done", "Open"])
       expect(within(toasts()[0]).getByRole("button", { name })).toBeTruthy();
   });
 
@@ -94,14 +94,14 @@ describe("in-app notifications", () => {
     expect(screen.getByTestId("badge").textContent).toBe("5");
   });
 
-  it("snooze moves reminderAt +15 min, removes the notification and re-arms", () => {
+  it("snooze moves reminderAt +5 min, removes the notification and re-arms", () => {
     seed(1);
     render(<App />);
-    fireEvent.click(within(toasts()[0]).getByRole("button", { name: "Snooze 15 min" }));
-    expect(stored()[0].reminderAt).toBe(T0 + 15 * 60 * 1000);
+    fireEvent.click(within(toasts()[0]).getByRole("button", { name: "Snooze 5 min" }));
+    expect(stored()[0].reminderAt).toBe(T0 + 5 * 60 * 1000);
     expect(toasts()).toHaveLength(0);
     expect(screen.queryByTestId("badge")).toBeNull();
-    advance(15 * 60 * 1000 + 1000);
+    advance(5 * 60 * 1000 + 1000);
     expect(toasts()).toHaveLength(1);
   });
 

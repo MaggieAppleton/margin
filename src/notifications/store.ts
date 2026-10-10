@@ -4,7 +4,7 @@ import { getDueEvents, subscribe as subscribeDue } from "../scheduler/store";
 
 export const MAX_TOASTS = 3;
 export const TOAST_MS = 4000;
-export const SNOOZE_MS = 15 * 60 * 1000;
+export const SNOOZE_MS = 5 * 60 * 1000;
 
 type Item = { key: string; noteId: string; reminderAt: number; toast: boolean };
 type State = { items: Item[]; seen: number; announcement: string };

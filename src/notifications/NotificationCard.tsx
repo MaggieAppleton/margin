@@ -12,7 +12,7 @@ export function NotificationCard({ n, actions }: { n: Notification; actions: Not
       <strong className="notification-title">{n.title}</strong>
       {n.firstLine && <span className="notification-body">{n.firstLine}</span>}
       <div className="notification-actions">
-        <button onClick={() => actions.snooze(n)}>Snooze 15 min</button>
+        <button onClick={() => actions.snooze(n)}>Snooze 5 min</button>
         <button onClick={() => actions.done(n)}>Done</button>
         <button onClick={() => actions.open(n)}>Open</button>
       </div>
