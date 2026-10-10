@@ -40,6 +40,13 @@ export function removeNote(notes: Note[], id: string): Note[] {
   return notes.filter((n) => n.id !== id);
 }
 
+// Undo keeps notes added since clearing on top and puts the cleared notes
+// after them, skipping any already present.
+export function restoreNotes(current: Note[], cleared: Note[]): Note[] {
+  const ids = new Set(current.map((n) => n.id));
+  return [...current, ...cleared.filter((n) => !ids.has(n.id))];
+}
+
 function defaultStore(): Store | undefined {
   try {
     return typeof localStorage === "undefined" ? undefined : localStorage;
