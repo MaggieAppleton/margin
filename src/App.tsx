@@ -45,9 +45,12 @@ export default function App() {
         onKeyDown={onKeyDown}
       />
       <ul>
-        {notes.map((note, i) => (
-          <li key={i}>{note}</li>
-        ))}
+        {notes
+          .map((note, i) => ({ note, i }))
+          .reverse()
+          .map(({ note, i }) => (
+            <li key={i}>{note}</li>
+          ))}
       </ul>
     </>
   )
