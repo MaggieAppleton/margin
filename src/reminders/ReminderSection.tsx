@@ -1,3 +1,4 @@
+import { now } from "../scheduler/store";
 import { useState } from "react";
 import {
   PRESETS,
@@ -15,7 +16,7 @@ export function ReminderSection({ reminderAt, onChange }: Props) {
   const [text, setText] = useState("");
   const [message, setMessage] = useState<string | null>(null);
 
-  const parsed = text.trim() ? parseReminder(text, new Date()) : null;
+  const parsed = text.trim() ? parseReminder(text, new Date(now())) : null;
 
   const set = (at: number) => {
     onChange(at);
@@ -24,7 +25,7 @@ export function ReminderSection({ reminderAt, onChange }: Props) {
   };
 
   const confirm = () => {
-    const result = parseReminder(text, new Date());
+    const result = parseReminder(text, new Date(now()));
     if (result.ok) set(result.at);
     else setMessage(result.message);
   };
@@ -77,7 +78,7 @@ export function ReminderSection({ reminderAt, onChange }: Props) {
           <button
             key={p.id}
             type="button"
-            onClick={() => set(presetTime(p.id, new Date()).getTime())}
+            onClick={() => set(presetTime(p.id, new Date(now())).getTime())}
           >
             {p.label}
           </button>

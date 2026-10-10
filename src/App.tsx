@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { ReminderSection } from "./reminders/ReminderSection";
 import { useNotes } from "./notes/useNotes";
+import { Footer } from "./scheduler/Footer";
+import { useScheduler } from "./scheduler/hooks";
 import "./App.css";
 
 function isTyping(el: EventTarget | null) {
@@ -12,6 +14,7 @@ function isTyping(el: EventTarget | null) {
 
 export default function App() {
   const { notes, create, edit } = useNotes();
+  useScheduler(notes);
   const [openId, setOpenId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -74,6 +77,7 @@ export default function App() {
           ))}
         </ul>
       )}
+      <Footer notes={notes} />
     </main>
   );
 }

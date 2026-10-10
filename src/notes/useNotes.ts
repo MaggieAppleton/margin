@@ -2,6 +2,9 @@ import { useCallback, useState } from "react";
 import { loadNotes, saveNotes } from "./storage";
 import type { Note } from "./types";
 
+export const clearReminder = (notes: Note[], id: string): Note[] =>
+  notes.map((n) => (n.id === id ? { ...n, reminderAt: null } : n));
+
 export function useNotes() {
   const [notes, setNotes] = useState<Note[]>(loadNotes);
 
@@ -31,5 +34,15 @@ export function useNotes() {
     [update],
   );
 
-  return { notes: [...notes].sort((a, b) => b.createdAt - a.createdAt), create, edit };
+  const completeReminder = useCallback(
+    (id: string) => update((prev) => clearReminder(prev, id)),
+    [update],
+  );
+
+  return {
+    notes: [...notes].sort((a, b) => b.createdAt - a.createdAt),
+    create,
+    edit,
+    completeReminder,
+  };
 }
