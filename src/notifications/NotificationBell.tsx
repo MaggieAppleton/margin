@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useId, useRef, useState } from "react";
 import { NotificationCard, type NotificationActions } from "./NotificationCard";
 import type { Notification } from "./store";
 
@@ -10,9 +10,22 @@ export function NotificationBell({
   actions: NotificationActions;
 }) {
   const [open, setOpen] = useState(false);
+  const trayId = useId();
+  const toggle = useRef<HTMLButtonElement>(null);
   return (
-    <div className="bell">
+    <div
+      className="bell"
+      onKeyDown={(e) => {
+        if (e.key === "Escape" && open) {
+          e.stopPropagation();
+          setOpen(false);
+          toggle.current?.focus();
+        }
+      }}
+    >
       <button
+        ref={toggle}
+        aria-controls={open ? trayId : undefined}
         aria-label={`Notifications, ${list.length} outstanding`}
         aria-expanded={open}
         onClick={() => setOpen((o) => !o)}
@@ -25,7 +38,7 @@ export function NotificationBell({
         )}
       </button>
       {open && (
-        <div className="tray" role="region" aria-label="Notifications">
+        <div id={trayId} className="tray" role="region" aria-label="Notifications">
           {list.length === 0 ? (
             <p className="empty">No reminders due.</p>
           ) : (

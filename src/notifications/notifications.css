@@ -14,3 +14,9 @@
 @media (prefers-reduced-motion: reduce) { .toast { animation: none; } }
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .notes li.highlight { outline: 2px solid #f5a623; background: rgba(245, 166, 35, .15); }
+:focus-visible { outline: 2px solid #1a73e8; outline-offset: 2px; }
+@media (max-width: 30rem) {
+  .tray { position: fixed; left: 1rem; right: 1rem; top: 4rem; width: auto; max-width: none; }
+  .toast-stack { left: 1rem; right: 1rem; width: auto; max-width: none; }
+  .notification-actions button { padding: .4rem .25rem; font-size: .75rem; min-height: 2.25rem; }
+}

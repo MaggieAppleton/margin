@@ -14,3 +14,9 @@
 .reminder-message { color: #b00020; }
 .margin-footer { display: flex; gap: 1rem; align-items: center; margin-top: 2rem; font-size: .875rem; }
 .header-actions { display: flex; gap: .5rem; align-items: center; }
+.margin { box-sizing: border-box; overflow-wrap: anywhere; }
+.margin header { flex-wrap: wrap; gap: .5rem; }
+.header-actions { flex-wrap: wrap; }
+.editor input, .editor textarea { width: 100%; box-sizing: border-box; font: inherit; }
+.reminder .reminder-entry input { min-width: 0; }
+@media (max-width: 30rem) { .margin { padding: 1rem .75rem; } .editor { padding: .5rem; } }

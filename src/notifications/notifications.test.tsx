@@ -132,4 +132,31 @@ describe("in-app notifications", () => {
     const live = document.querySelector('[aria-live="polite"]')!;
     expect(live.textContent).toContain("Reminder due: Note 0");
   });
+
+  it("tray toggle exposes aria-expanded/aria-controls and Escape closes it, restoring focus", () => {
+    seed(1);
+    render(<App />);
+    const bell = screen.getByRole("button", { name: /^Notifications/ });
+    expect(bell.getAttribute("aria-expanded")).toBe("false");
+    fireEvent.click(bell);
+    expect(bell.getAttribute("aria-expanded")).toBe("true");
+    expect(document.getElementById(bell.getAttribute("aria-controls")!)).toBe(
+      screen.getByRole("region", { name: "Notifications" }),
+    );
+    const open = tray().getByRole("button", { name: "Open" });
+    open.focus();
+    fireEvent.keyDown(open, { key: "Escape" });
+    expect(screen.queryByRole("region", { name: "Notifications" })).toBeNull();
+    expect(bell.getAttribute("aria-expanded")).toBe("false");
+    expect(document.activeElement).toBe(bell);
+  });
+
+  it("note rows are focusable buttons that open the editor", () => {
+    seed(1);
+    render(<App />);
+    const row = screen.getByRole("button", { name: /Note 0/ });
+    row.focus();
+    fireEvent.click(row);
+    expect(screen.getByRole("textbox", { name: "Title" })).toBeTruthy();
+  });
 });
