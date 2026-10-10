@@ -1,0 +1,5 @@
+body { margin: 0; font: 16px/1.5 system-ui, sans-serif; }
+main { max-width: 36rem; margin: 0 auto; padding: 1.5rem 1rem; }
+input { width: 100%; box-sizing: border-box; padding: 0.6rem 0.75rem; font: inherit; }
+ul { list-style: none; padding: 0; margin: 1rem 0; }
+li { padding: 0.6rem 0; border-bottom: 1px solid #ddd; overflow-wrap: anywhere; }
