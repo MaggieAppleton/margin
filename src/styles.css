@@ -16,7 +16,8 @@ main {
 }
 
 .count-badge {
-  font-size: 13px;
+  font-size: 12px;
+  font-weight: 700;
   color: #6b7280;
   background: #f3f4f6;
   border-radius: 999px;
