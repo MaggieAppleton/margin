@@ -34,7 +34,15 @@ export default function App() {
       <section aria-label="Notes">
         <ul data-slot="notes-list">
           {notes.map((n) => (
-            <li key={n.id}>{n.text}</li>
+            <li key={n.id}>
+              {n.text}{" "}
+              <time
+                dateTime={new Date(n.createdAt).toISOString()}
+                style={{ color: "#999", fontSize: "0.8em" }}
+              >
+                {new Date(n.createdAt).toLocaleString()}
+              </time>
+            </li>
           ))}
         </ul>
       </section>

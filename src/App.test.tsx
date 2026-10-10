@@ -16,15 +16,22 @@ test("adds notes newest first and persists across reload", async () => {
   await user.type(input, "first{Enter}");
   expect(input.value).toBe("");
   await user.type(input, "second{Enter}");
-  expect(screen.getAllByRole("listitem").map((l) => l.textContent)).toEqual(["second", "first"]);
+  expect(screen.getAllByRole("listitem").map((l) => l.firstChild?.textContent?.trim())).toEqual(["second", "first"]);
   expect(JSON.parse(localStorage.getItem("margin.notes")!)).toHaveLength(2);
   unmount();
   render(<App />);
-  expect(screen.getAllByRole("listitem").map((l) => l.textContent)).toEqual(["second", "first"]);
+  expect(screen.getAllByRole("listitem").map((l) => l.firstChild?.textContent?.trim())).toEqual(["second", "first"]);
 });
 
 test("corrupt storage does not crash", () => {
   localStorage.setItem("margin.notes", "{not json");
   render(<App />);
   expect(screen.queryAllByRole("listitem")).toHaveLength(0);
+});
+
+test("each note shows a time stamp", async () => {
+  const user = userEvent.setup();
+  render(<App />);
+  await user.type(screen.getByRole("textbox"), "stamped{Enter}");
+  expect(screen.getByRole("listitem").querySelector("time")?.textContent).toBeTruthy();
 });
