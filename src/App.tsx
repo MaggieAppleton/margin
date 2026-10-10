@@ -1,19 +1,20 @@
-import { useState } from "react";
-
-type Note = { id: string; title: string; body: string };
-
-const sampleNotes: Note[] = [
-  { id: "3", title: "Call the dentist", body: "Ask about a Thursday slot." },
-  { id: "2", title: "Groceries", body: "Oats, lemons, coffee." },
-  { id: "1", title: "Book ideas", body: "Short essays on small tools." },
-];
+import { useEffect, useState } from "react";
+import { createNote, loadNotes, saveNotes, sortNewestFirst, type Note } from "./notes";
 
 export function App() {
-  const [notes, setNotes] = useState(sampleNotes);
+  const [notes, setNotes] = useState<Note[]>(() => loadNotes());
   const [openId, setOpenId] = useState<string | null>(null);
+
+  useEffect(() => saveNotes(notes), [notes]);
 
   const update = (id: string, patch: Partial<Note>) =>
     setNotes((all) => all.map((n) => (n.id === id ? { ...n, ...patch } : n)));
+
+  const add = () => {
+    const note = createNote();
+    setNotes((all) => sortNewestFirst([note, ...all]));
+    setOpenId(note.id);
+  };
 
   return (
     <div className="app">
@@ -22,6 +23,8 @@ export function App() {
         <div className="slot" data-slot="reminder-tray" />
       </header>
       <main className="workspace">
+        <button className="new-note" onClick={add}>New note</button>
+        {notes.length === 0 && <p className="empty">No notes yet.</p>}
         <ul className="notes">
           {notes.map((note) => {
             const open = note.id === openId;
@@ -38,6 +41,7 @@ export function App() {
                 {open && (
                   <div className="editor">
                     <input
+                      autoFocus={note.id === openId && !note.title && !note.body}
                       aria-label="Title"
                       value={note.title}
                       onChange={(e) => update(note.id, { title: e.target.value })}
