@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { ReminderSection } from "./reminders/ReminderSection";
 import { useNotes } from "./notes/useNotes";
 import "./App.css";
 
@@ -56,6 +57,10 @@ export default function App() {
                     rows={6}
                     value={n.body}
                     onChange={(e) => edit(n.id, { body: e.target.value })}
+                  />
+                  <ReminderSection
+                    reminderAt={n.reminderAt}
+                    onChange={(reminderAt) => edit(n.id, { reminderAt })}
                   />
                   <button onClick={() => setOpenId(null)}>Close</button>
                 </div>
