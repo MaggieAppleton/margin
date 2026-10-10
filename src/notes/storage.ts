@@ -23,10 +23,39 @@ export function loadNotes(): Note[] {
   }
 }
 
-export function saveNotes(notes: Note[]): void {
+function writeNotes(notes: Note[]): void {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
   } catch {
     // storage full or unavailable; keep working in memory
   }
+}
+
+const SAVE_DELAY_MS = 300;
+let pending: Note[] | null = null;
+let timer: ReturnType<typeof setTimeout> | undefined;
+
+export function flushNotes(): void {
+  clearTimeout(timer);
+  timer = undefined;
+  if (pending) {
+    const notes = pending;
+    pending = null;
+    writeNotes(notes);
+  }
+}
+
+// Coalesces rapid edits into one write of the latest state.
+export function saveNotes(notes: Note[]): void {
+  pending = notes;
+  clearTimeout(timer);
+  timer = setTimeout(flushNotes, SAVE_DELAY_MS);
+}
+
+if (typeof window !== "undefined") {
+  window.addEventListener("pagehide", flushNotes);
+  window.addEventListener("beforeunload", flushNotes);
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") flushNotes();
+  });
 }
