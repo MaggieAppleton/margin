@@ -34,3 +34,11 @@ test('tolerates bad stored data', () => {
   render(<App />)
   expect(screen.queryAllByRole('listitem')).toHaveLength(0)
 })
+
+test('shows the newest note first', async () => {
+  const user = userEvent.setup()
+  render(<App />)
+  const box = screen.getByLabelText('New note')
+  await user.type(box, 'first{Enter}second{Enter}')
+  expect(screen.getAllByRole('listitem').map((li) => li.textContent)).toEqual(['second', 'first'])
+})
