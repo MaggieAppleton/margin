@@ -1,0 +1,15 @@
+<!doctype html><meta charset="utf-8"><title>Notes - single</title>
+<style>
+body{font:16px/1.5 system-ui,sans-serif;margin:0;background:#f6f5f2;color:#222}
+main{max-width:1000px;margin:0 auto;padding:32px 24px}
+body.single main{max-width:640px}
+textarea{width:100%;box-sizing:border-box;height:72px;padding:10px;font:inherit;border:1px solid #bbb;border-radius:6px}
+button{margin:8px 0 20px;padding:6px 14px;font:inherit}
+ul{list-style:none;margin:0;padding:0}
+li{background:#fff;border:1px solid #ddd;border-radius:6px;padding:10px 14px}
+.single li{margin-bottom:8px}
+.grid ul{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.grid li{padding:16px}
+</style>
+<main><h1>Notes</h1><textarea placeholder="Add a note…"></textarea><br><button>Add</button><ul id="list"></ul></main>
+<script src="notes-data.js"></script><script>render('single')</script>
