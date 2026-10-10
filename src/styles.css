@@ -6,3 +6,7 @@ li { display: flex; justify-content: space-between; gap: 0.5rem; padding: 0.5rem
 li span { overflow-wrap: anywhere; }
 button { border: none; background: none; cursor: pointer; font-size: 1rem; color: #888; }
 button:hover { color: #c00; }
+.clear-all { display: block; margin-top: 0.5rem; }
+.clear-all:disabled { display: none; }
+.toast { position: fixed; bottom: 1rem; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 1rem; padding: 0.6rem 1rem; background: #222; color: #fafafa; border-radius: 0.4rem; }
+.toast button { color: #8cf; }
