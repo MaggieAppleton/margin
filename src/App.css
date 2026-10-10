@@ -12,3 +12,4 @@
 .reminder .reminder-presets button, .reminder .reminder-entry button { align-self: auto; }
 .reminder-preview, .reminder-message { margin: 0; font-size: .875rem; }
 .reminder-message { color: #b00020; }
+.margin-footer { display: flex; gap: 1rem; align-items: center; margin-top: 2rem; font-size: .875rem; }
