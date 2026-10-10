@@ -20,6 +20,15 @@ export function App() {
   }, []);
 
   useEffect(() => {
+    const onOpenNote = (e: Event) => {
+      const id = (e as CustomEvent<{ noteId?: string }>).detail?.noteId;
+      if (id) openNote(id);
+    };
+    window.addEventListener("margin:open-note", onOpenNote);
+    return () => window.removeEventListener("margin:open-note", onOpenNote);
+  }, [openNote]);
+
+  useEffect(() => {
     if (!highlightId) return;
     document.getElementById(`note-${highlightId}`)?.scrollIntoView({ behavior: "smooth", block: "center" });
     const t = setTimeout(() => setHighlightId(null), 2000);
