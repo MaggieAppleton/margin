@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ReminderSection } from "./reminders/ReminderSection";
 import { useNotes } from "./notes/useNotes";
+import { Notifications } from "./notifications/Notifications";
 import { Footer } from "./scheduler/Footer";
 import { useScheduler } from "./scheduler/hooks";
 import "./App.css";
@@ -13,9 +14,22 @@ function isTyping(el: EventTarget | null) {
 }
 
 export default function App() {
-  const { notes, create, edit } = useNotes();
+  const { notes, create, edit, completeReminder } = useNotes();
   useScheduler(notes);
   const [openId, setOpenId] = useState<string | null>(null);
+  const [highlightId, setHighlightId] = useState<string | null>(null);
+
+  const openNote = useCallback((id: string) => {
+    setOpenId(id);
+    setHighlightId(id);
+  }, []);
+
+  useEffect(() => {
+    if (!highlightId) return;
+    document.getElementById(`note-${highlightId}`)?.scrollIntoView?.({ block: "center" });
+    const t = setTimeout(() => setHighlightId(null), 3000);
+    return () => clearTimeout(t);
+  }, [highlightId]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -37,14 +51,21 @@ export default function App() {
     <main className="margin">
       <header>
         <h1>Margin</h1>
-        <button onClick={() => setOpenId(create())}>New note</button>
+        <div className="header-actions">
+          <Notifications part="bell" notes={notes} edit={edit} completeReminder={completeReminder} openNote={openNote} />
+          <button onClick={() => setOpenId(create())}>New note</button>
+        </div>
       </header>
       {notes.length === 0 ? (
         <p className="empty">Write your first note.</p>
       ) : (
         <ul className="notes">
           {notes.map((n) => (
-            <li key={n.id} className={n.id === openId ? "open" : undefined}>
+            <li
+              key={n.id}
+              id={`note-${n.id}`}
+              className={[n.id === openId && "open", n.id === highlightId && "highlight"].filter(Boolean).join(" ") || undefined}
+            >
               {n.id === openId ? (
                 <div className="editor">
                   <input
@@ -78,6 +99,7 @@ export default function App() {
         </ul>
       )}
       <Footer notes={notes} />
+      <Notifications part="toasts" notes={notes} edit={edit} completeReminder={completeReminder} openNote={openNote} />
     </main>
   );
 }
