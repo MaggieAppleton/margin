@@ -14,3 +14,21 @@ body {
 .notes {
   min-height: 6rem;
 }
+
+.note-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.5rem 0.75rem;
+  font: inherit;
+}
+
+.notes ul {
+  list-style: none;
+  padding: 0;
+}
+
+.notes li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #ddd;
+  white-space: pre-wrap;
+}
