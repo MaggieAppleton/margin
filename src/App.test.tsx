@@ -105,9 +105,10 @@ describe("notes count footer", () => {
     expect(count()).toBe("1 note");
   });
 
-  it("is 12px muted gray", () => {
+  it("is 13px muted gray, right-aligned", () => {
     const el = document.querySelector(".notes-count") as HTMLElement;
-    expect(el.style.fontSize).toBe("12px");
+    expect(el.style.fontSize).toBe("13px");
+    expect(el.style.textAlign).toBe("right");
     expect(el.style.color).toBe("rgb(136, 136, 136)");
   });
 });

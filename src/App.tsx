@@ -58,7 +58,7 @@ export default function App() {
       </ul>
       <p
         className="notes-count"
-        style={{ fontSize: 12, color: "#888", margin: "0.5rem 0 0" }}
+        style={{ fontSize: 13, color: "#888", textAlign: "right", margin: "0.5rem 0 0" }}
       >
         {notes.length} {notes.length === 1 ? "note" : "notes"}
       </p>
