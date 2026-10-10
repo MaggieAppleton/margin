@@ -16,6 +16,12 @@ export default function App() {
     setDraft('')
   }
 
+  function deleteNote(id: string) {
+    const next = notes.filter((n) => n.id !== id)
+    setNotes(next)
+    saveNotes(next)
+  }
+
   return (
     <main className="page">
       <h1>Margin</h1>
@@ -33,7 +39,17 @@ export default function App() {
       <section className="notes" aria-label="Notes">
         <ul>
           {notes.map((n) => (
-            <li key={n.id}>{n.text}</li>
+            <li key={n.id}>
+              <span className="note-text">{n.text}</span>
+              <button
+                type="button"
+                className="note-delete"
+                aria-label="Delete note"
+                onClick={() => deleteNote(n.id)}
+              >
+                ×
+              </button>
+            </li>
           ))}
         </ul>
       </section>
