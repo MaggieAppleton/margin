@@ -20,3 +20,14 @@ textarea {
   min-height: 60vh;
   font: inherit;
 }
+
+.hint {
+  margin: 0.25rem 0 0;
+  font-size: 13px;
+  text-align: right;
+  color: #6b7280;
+}
+
+.hint-low {
+  color: #b45309;
+}
