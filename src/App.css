@@ -13,3 +13,4 @@
 .reminder-preview, .reminder-message { margin: 0; font-size: .875rem; }
 .reminder-message { color: #b00020; }
 .margin-footer { display: flex; gap: 1rem; align-items: center; margin-top: 2rem; font-size: .875rem; }
+.header-actions { display: flex; gap: .5rem; align-items: center; }

@@ -8,7 +8,7 @@ export type Clock = {
 
 // Real time by default; in demo mode app time advances DEMO_RATE x real time
 // from the moment of enabling.
-export function createClock(realNow: () => number = Date.now): Clock {
+export function createClock(realNow: () => number = () => Date.now()): Clock {
   let demo: { realStart: number; appStart: number } | null = null;
   return {
     now: () => (demo ? demo.appStart + (realNow() - demo.realStart) * DEMO_RATE : realNow()),
