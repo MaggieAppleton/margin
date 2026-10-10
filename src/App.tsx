@@ -1,5 +1,7 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { DemoClock } from "./DemoClock";
+import { NotificationTray } from "./NotificationTray";
+import { ToastStack } from "./ToastStack";
 import { NotificationsProvider } from "./NotificationsContext";
 import { ReminderField } from "./ReminderField";
 import { createNote, loadNotes, saveNotes, sortNewestFirst, type Note } from "./notes";
@@ -9,6 +11,29 @@ export function App() {
   const [openId, setOpenId] = useState<string | null>(null);
 
   useEffect(() => saveNotes(notes), [notes]);
+
+  const [highlightId, setHighlightId] = useState<string | null>(null);
+
+  const openNote = useCallback((id: string) => {
+    setOpenId(id);
+    setHighlightId(id);
+  }, []);
+
+  useEffect(() => {
+    const onOpenNote = (e: Event) => {
+      const id = (e as CustomEvent<{ noteId?: string }>).detail?.noteId;
+      if (id) openNote(id);
+    };
+    window.addEventListener("margin:open-note", onOpenNote);
+    return () => window.removeEventListener("margin:open-note", onOpenNote);
+  }, [openNote]);
+
+  useEffect(() => {
+    if (!highlightId) return;
+    document.getElementById(`note-${highlightId}`)?.scrollIntoView({ behavior: "smooth", block: "center" });
+    const t = setTimeout(() => setHighlightId(null), 2000);
+    return () => clearTimeout(t);
+  }, [highlightId]);
 
   const update = (id: string, patch: Partial<Note>) =>
     setNotes((all) => all.map((n) => (n.id === id ? { ...n, ...patch } : n)));
@@ -24,7 +49,7 @@ export function App() {
     <div className="app">
       <header className="header">
         <h1>Margin</h1>
-        <div className="slot" data-slot="reminder-tray" />
+        <div className="slot" data-slot="reminder-tray"><NotificationTray notes={notes} onOpen={openNote} /></div>
       </header>
       <main className="workspace">
         <button className="new-note" onClick={add}>New note</button>
@@ -33,7 +58,7 @@ export function App() {
           {notes.map((note) => {
             const open = note.id === openId;
             return (
-              <li key={note.id} className="note">
+              <li key={note.id} id={`note-${note.id}`} className={note.id === highlightId ? "note highlight" : "note"}>
                 <button
                   className="note-summary"
                   aria-expanded={open}
@@ -67,6 +92,7 @@ export function App() {
           })}
         </ul>
       </main>
+      <ToastStack notes={notes} onOpen={openNote} />
       <footer className="footer">
         <div className="slot" data-slot="demo-clock"><DemoClock /></div>
         <div className="slot" data-slot="system-notifications" />
