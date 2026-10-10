@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react'
 import { relativeTime } from './relativeTime'
-
-type Note = { id: string; text: string; createdAt: number }
+import { loadNotes, saveNotes, type Note } from './storage'
 
 export default function App() {
-  const [notes, setNotes] = useState<Note[]>([])
+  const [notes, setNotes] = useState<Note[]>(loadNotes)
   const [draft, setDraft] = useState('')
   const [now, setNow] = useState(Date.now())
 
@@ -12,6 +11,10 @@ export default function App() {
     const t = setInterval(() => setNow(Date.now()), 30_000)
     return () => clearInterval(t)
   }, [])
+
+  useEffect(() => {
+    saveNotes(notes)
+  }, [notes])
 
   function add() {
     const text = draft.trim()
