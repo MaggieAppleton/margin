@@ -1,17 +1,16 @@
-import { useCallback, useState } from "react";
-import { loadNotes, saveNotes } from "./storage";
+import { useCallback, useEffect, useState } from "react";
+import { flushNotes, loadNotes, saveNotes } from "./storage";
 import type { Note } from "./types";
 
-export function useNotes() {
-  const [notes, setNotes] = useState<Note[]>(loadNotes);
+const newestFirst = (a: Note, b: Note) => b.createdAt - a.createdAt;
 
-  const update = useCallback((fn: (prev: Note[]) => Note[]) => {
-    setNotes((prev) => {
-      const next = fn(prev);
-      saveNotes(next);
-      return next;
-    });
-  }, []);
+export function useNotes() {
+  // Kept sorted newest-first so edits never need re-sorting.
+  const [notes, setNotes] = useState<Note[]>(() => loadNotes().sort(newestFirst));
+
+  useEffect(() => {
+    saveNotes(notes);
+  }, [notes]);
 
   const create = useCallback((): string => {
     const note: Note = {
@@ -21,15 +20,21 @@ export function useNotes() {
       reminderAt: null,
       createdAt: Date.now(),
     };
-    update((prev) => [note, ...prev]);
+    setNotes((prev) => [note, ...prev].sort(newestFirst));
     return note.id;
-  }, [update]);
+  }, []);
 
   const edit = useCallback(
     (id: string, patch: Partial<Pick<Note, "title" | "body">>) =>
-      update((prev) => prev.map((n) => (n.id === id ? { ...n, ...patch } : n))),
-    [update],
+      setNotes((prev) => {
+        const i = prev.findIndex((n) => n.id === id);
+        if (i < 0) return prev;
+        const next = prev.slice();
+        next[i] = { ...prev[i], ...patch };
+        return next;
+      }),
+    [],
   );
 
-  return { notes: [...notes].sort((a, b) => b.createdAt - a.createdAt), create, edit };
+  return { notes, create, edit, flush: flushNotes };
 }
