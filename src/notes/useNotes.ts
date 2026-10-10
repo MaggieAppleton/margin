@@ -26,7 +26,7 @@ export function useNotes() {
   }, [update]);
 
   const edit = useCallback(
-    (id: string, patch: Partial<Pick<Note, "title" | "body">>) =>
+    (id: string, patch: Partial<Pick<Note, "title" | "body" | "reminderAt">>) =>
       update((prev) => prev.map((n) => (n.id === id ? { ...n, ...patch } : n))),
     [update],
   );

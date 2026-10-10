@@ -6,3 +6,9 @@
 .editor { display: flex; flex-direction: column; gap: .5rem; padding: .75rem; border: 1px solid currentColor; }
 .editor button { align-self: flex-end; }
 .empty { opacity: .7; }
+.reminder { display: flex; flex-direction: column; gap: .4rem; }
+.reminder .reminder-entry, .reminder .reminder-presets { display: flex; flex-wrap: wrap; gap: .4rem; }
+.reminder .reminder-entry input { flex: 1; min-width: 10rem; }
+.reminder .reminder-presets button, .reminder .reminder-entry button { align-self: auto; }
+.reminder-preview, .reminder-message { margin: 0; font-size: .875rem; }
+.reminder-message { color: #b00020; }
