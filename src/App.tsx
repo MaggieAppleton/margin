@@ -16,6 +16,10 @@ export default function App() {
     setDraft("");
   }
 
+  function remove(id: string) {
+    setNotes((prev) => prev.filter((n) => n.id !== id));
+  }
+
   return (
     <>
       <h1>Margin</h1>
@@ -35,7 +39,25 @@ export default function App() {
         ) : (
           <ul>
             {notes.map((n) => (
-              <li key={n.id}>{n.text}</li>
+              <li
+                key={n.id}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  gap: 8,
+                }}
+              >
+                <span>{n.text}</span>
+                <button
+                  type="button"
+                  aria-label={`Delete note: ${n.text}`}
+                  onClick={() => remove(n.id)}
+                  style={{ minWidth: 32, minHeight: 32, padding: 8 }}
+                >
+                  ×
+                </button>
+              </li>
             ))}
           </ul>
         )}

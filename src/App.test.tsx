@@ -8,7 +8,7 @@ beforeEach(() => localStorage.clear());
 afterEach(cleanup);
 
 const input = () => screen.getByLabelText("New note");
-const items = () => screen.queryAllByRole("listitem").map((l) => l.textContent);
+const items = () => screen.queryAllByRole("listitem").map((l) => l.querySelector("span")?.textContent);
 
 test("empty state, add, newest first, clear, reject blank, persist", async () => {
   const user = userEvent.setup();
@@ -33,4 +33,21 @@ test("corrupt storage is ignored", () => {
   localStorage.setItem("margin.notes", "{bad");
   render(<App />);
   expect(screen.getByText("No notes yet.")).toBeTruthy();
+});
+
+test("each note has an always-visible delete control; removal persists", async () => {
+  const user = userEvent.setup();
+  const { unmount } = render(<App />);
+  await user.type(input(), "first{Enter}");
+  await user.type(input(), "second{Enter}");
+
+  expect(screen.getAllByRole("button", { name: /^Delete note: / })).toHaveLength(2);
+  expect(screen.getByRole("button", { name: "Delete note: first" }).textContent).toBe("×");
+
+  await user.click(screen.getByRole("button", { name: "Delete note: first" }));
+  expect(items()).toEqual(["second"]);
+
+  unmount();
+  render(<App />);
+  expect(items()).toEqual(["second"]);
 });
