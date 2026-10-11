@@ -1,0 +1,14 @@
+.notes li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.note-time {
+  margin-left: auto;
+  flex: none;
+  white-space: nowrap;
+  font-size: 0.8em;
+  opacity: 0.6;
+}
