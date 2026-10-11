@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import EmptyState from './EmptyState';
 import { loadNotes, saveNotes, type Note } from './notes';
 
 export default function App() {
@@ -26,6 +27,7 @@ export default function App() {
         onChange={(e) => setDraft(e.target.value)}
         onKeyDown={onKeyDown}
       />
+      {notes.length === 0 && <EmptyState />}
       <ul className="notes">
         {notes.map((n) => (
           <li key={n.id}>{n.text}</li>
