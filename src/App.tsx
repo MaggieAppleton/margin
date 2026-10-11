@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import NoteTime from './NoteTime';
 import { loadNotes, saveNotes, type Note } from './notes';
 
 export default function App() {
@@ -28,7 +29,10 @@ export default function App() {
       />
       <ul className="notes">
         {notes.map((n) => (
-          <li key={n.id}>{n.text}</li>
+          <li key={n.id}>
+            <span>{n.text}</span>
+            <NoteTime createdAt={n.createdAt} />
+          </li>
         ))}
       </ul>
     </main>
