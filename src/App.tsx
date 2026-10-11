@@ -58,7 +58,9 @@ export default function App() {
           ))}
         </ul>
       </main>
-      <footer></footer>
+      <footer style={{ color: "#6b7280", fontSize: "13px", textAlign: "right" }}>
+        {notes.length} {notes.length === 1 ? "note" : "notes"}
+      </footer>
     </>
   );
 }
