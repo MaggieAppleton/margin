@@ -8,8 +8,8 @@ the recorded demo. Extend this foundation when working from the document.
 A two-pane workspace: searchable notes on the left; title and plain-text body on
 the right. Each list row shows the note title.
 Notes save to localStorage as you type. New and delete are the only note actions.
-The interface uses shadcn/ui controls, warm off-white surfaces, a small sans UI,
-and a serif editor.
+The interface uses shadcn/ui controls, warm off-white surfaces, a small sans UI
+and a sans editor.
 There are no accounts, backend, deployment, reminders, or resurfacing features.
 
 ## Data
