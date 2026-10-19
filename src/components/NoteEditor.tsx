@@ -37,7 +37,7 @@ export function NoteEditor({ note, error, onEdit, onDelete, onBack, onNew }: Pro
       </div>
     </header>
     <AlertDialog open={confirming} onOpenChange={setConfirming}>
-      <AlertDialogContent>
+      <AlertDialogContent onOpenAutoFocus={event => { event.preventDefault(); (event.currentTarget as HTMLElement).focus() }}>
         <AlertDialogHeader><AlertDialogTitle>Delete this note?</AlertDialogTitle><AlertDialogDescription>“{name}” will be permanently deleted from this browser.</AlertDialogDescription></AlertDialogHeader>
         <AlertDialogFooter><AlertDialogCancel variant="ghost">Cancel</AlertDialogCancel><AlertDialogAction className="danger-button" onClick={onDelete}>Delete</AlertDialogAction></AlertDialogFooter>
       </AlertDialogContent>

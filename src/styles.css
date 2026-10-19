@@ -176,6 +176,7 @@ button:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 1p
 /* Confirm dialog */
 [data-slot="alert-dialog-overlay"] { background: var(--color-scrim); }
 [data-slot="alert-dialog-content"] { display: block; width: 22.5rem; max-width: calc(100% - 2rem); padding: 1rem; border: 0; border-radius: var(--radius-lg); background: var(--color-surface); box-shadow: var(--shadow-dialog); }
+[data-slot="alert-dialog-content"]:focus { outline: none; }
 [data-slot="alert-dialog-title"] { font-size: var(--text-base); line-height: var(--text-base--line-height); font-weight: 600; }
 [data-slot="alert-dialog-description"] { margin: 0.375rem 0 1rem; font-size: var(--text-base); line-height: var(--text-base--line-height); color: var(--color-text-secondary); overflow-wrap: anywhere; }
 [data-slot="alert-dialog-footer"] { display: flex; flex-direction: row; justify-content: flex-end; gap: 0.5rem; }
