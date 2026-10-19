@@ -6,7 +6,7 @@ the recorded demo. Extend this foundation when working from the document.
 ## App shell
 
 A two-pane workspace: searchable notes on the left; title and plain-text body on
-the right. Each list row shows the title, first body line, and relative edit date.
+the right. Each list row shows the note title.
 Notes save to localStorage as you type. New and delete are the only note actions.
 The interface uses shadcn/ui controls, warm off-white surfaces, a small sans UI,
 and a serif editor.
