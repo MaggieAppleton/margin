@@ -2,6 +2,8 @@
 
 Margin's behaviour is defined by its Chopin document, not by this repository.
 
+The baseline in BASELINE.md predates the document; extend it, don't rewrite it.
+
 - Read the document before changing code. Build only what it describes.
 - If the code cannot match the document, report that back to the document
   instead of improvising a different behaviour.
