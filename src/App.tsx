@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { flushSync } from 'react-dom'
 import type { Workspace } from './data/model'
 import { createNote, deleteNote, editNote, openNote } from './data/notes'
 import { saveWorkspace } from './data/storage'
@@ -11,6 +12,19 @@ export function App({ initial, initialId, initialError }: { initial: Workspace; 
   const [query, setQuery] = useState('')
   const [error, setError] = useState(initialError)
   const [mobileEditor, setMobileEditor] = useState(false)
+
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if (!(event.metaKey || event.ctrlKey) || event.key.toLowerCase() !== 'k') return
+      event.preventDefault()
+      flushSync(() => setMobileEditor(false))
+      const input = document.querySelector<HTMLInputElement>('.search-input')
+      input?.focus()
+      input?.select()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
 
   function commit(next: Workspace) {
     setWorkspace(next)
