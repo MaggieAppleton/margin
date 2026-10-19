@@ -23,7 +23,7 @@ export function App({ initial, initialId, initialError }: { initial: Workspace; 
   }
 
   function select(id: string) {
-    if (id !== selectedId) commit(openNote(workspace, id, new Date().toISOString()))
+    commit(openNote(workspace, id, new Date().toISOString()))
     setSelectedId(id)
     setMobileEditor(true)
   }

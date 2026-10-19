@@ -32,7 +32,9 @@ variations about design, reading, and developer tools. Fixtures use day offsets
 relative to the current day and span 90 days. Every note has a creation view;
 40% are never reopened, most others have one or two reopens, and a few have many.
 `?reset` restores this workspace and is consumed so an ordinary reload preserves
-subsequent edits. Opening the first visible note records a real view.
+subsequent edits. Opening the first visible note records a real view. On phones,
+startup shows only the list; a view is recorded when its editor opens, including
+when returning to the same note from the list.
 
 ## Implementation and verification
 
