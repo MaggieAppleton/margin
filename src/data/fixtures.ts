@@ -45,7 +45,7 @@ export const seedFixtures: SeedFixture[] = [...handwritten, ...generated].map((n
     ...note,
     id: `seed-${String(index + 1).padStart(3, '0')}`,
     createdDaysAgo,
-    updatedDaysAgo: index % 7 === 0 ? createdDaysAgo * 0.7 : createdDaysAgo,
+    updatedDaysAgo: index % 7 === 0 ? viewedDaysAgo.at(-1)! : createdDaysAgo,
     viewedDaysAgo,
   }
 })

@@ -16,7 +16,7 @@ try {
   history.replaceState(null, '', url)
   const initialId = [...initial.notes].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))[0]?.id ?? null
   let initialError: string | null = null
-  if (initialId) {
+  if (initialId && matchMedia('(min-width: 701px)').matches) {
     initial = openNote(initial, initialId, new Date().toISOString())
     try { saveWorkspace(localStorage, initial) } catch { initialError = 'This browser couldn’t save the latest view. Your notes are available to read; edits will retry saving.' }
   }

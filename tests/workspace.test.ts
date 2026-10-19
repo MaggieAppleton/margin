@@ -16,6 +16,7 @@ test('seeds have 150 unique notes and a 40% never-reopened long tail', () => {
     assert.ok(history.length >= 1)
     assert.equal(note.lastViewedAt, history.at(-1)?.viewedAt)
     assert.ok(Date.parse(note.createdAt) <= Date.parse(note.updatedAt))
+    assert.ok(Date.parse(note.updatedAt) <= Date.parse(note.lastViewedAt), `${note.id} was edited after its last view`)
     assert.ok(history.every(v => Date.parse(v.viewedAt) >= Date.parse(note.createdAt) && Date.parse(v.viewedAt) <= +now))
     assert.ok(+now - Date.parse(note.createdAt) <= 90 * 86400000)
   }
