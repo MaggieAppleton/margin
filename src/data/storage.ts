@@ -13,7 +13,11 @@ function isWorkspace(value: unknown): value is Workspace {
       && typeof note.title === 'string' && typeof note.body === 'string'
       && timestamp(note.createdAt) && timestamp(note.updatedAt) && timestamp(note.lastViewedAt)
       && (note.archivedAt === undefined || timestamp(note.archivedAt))
+      && (note.reviewedAt === undefined || timestamp(note.reviewedAt))
       && Array.isArray(note.tags) && note.tags.every(tag => typeof tag === 'string'))
+    && (state.today === undefined || (!!state.today && typeof state.today === 'object' && typeof state.today.day === 'string'
+      && /^\d{4}-\d{2}-\d{2}$/.test(state.today.day) && Array.isArray(state.today.noteIds)
+      && state.today.noteIds.every(id => typeof id === 'string')))
     && state.viewEvents.every(event => event && typeof event.noteId === 'string' && timestamp(event.viewedAt))
 }
 
