@@ -6,12 +6,12 @@ import { saveWorkspace } from './data/storage'
 import { pickToday, todayNotes } from './data/today'
 import { NoteList } from './components/NoteList'
 import { NoteEditor } from './components/NoteEditor'
-import { TodayPage } from './components/TodayPage'
+import { HomePage } from './components/HomePage'
 
 export function App({ initial, initialId, initialError }: { initial: Workspace; initialId: string | null; initialError: string | null }) {
   const [workspace, setWorkspace] = useState(initial)
   const [selectedId, setSelectedId] = useState(initialId)
-  const [view, setView] = useState<'today' | 'note'>('note')
+  const [view, setView] = useState<'home' | 'note'>('note')
   const [query, setQuery] = useState('')
   const [error, setError] = useState(initialError)
   const [mobileEditor, setMobileEditor] = useState(false)
@@ -46,10 +46,10 @@ export function App({ initial, initialId, initialError }: { initial: Workspace; 
     setMobileEditor(true)
   }
 
-  function showToday() {
+  function showHome() {
     const picked = pickToday(workspace, new Date())
     if (picked !== workspace) commit(picked)
-    setView('today')
+    setView('home')
     setMobileEditor(true)
   }
 
@@ -79,9 +79,9 @@ export function App({ initial, initialId, initialError }: { initial: Workspace; 
   const selected = workspace.notes.find(note => note.id === selectedId)
 
   return <div className={`workspace${mobileEditor ? ' show-editor' : ''}`}>
-    <NoteList notes={visible} selectedId={view === 'note' ? selectedId : null} todayActive={view === 'today'} onToday={showToday} query={query} onQuery={setQuery} total={workspace.notes.length} onSelect={select} onNew={add} />
-    {view === 'today'
-      ? <TodayPage notes={todayNotes(workspace, new Date())} onOpen={select} onBack={() => setMobileEditor(false)} />
+    <NoteList notes={visible} selectedId={view === 'note' ? selectedId : null} homeActive={view === 'home'} onHome={showHome} query={query} onQuery={setQuery} total={workspace.notes.length} onSelect={select} onNew={add} />
+    {view === 'home'
+      ? <HomePage notes={todayNotes(workspace, new Date())} onOpen={select} onBack={() => setMobileEditor(false)} />
       : <NoteEditor note={selected} error={error} onBack={() => setMobileEditor(false)} onNew={add} onDelete={remove} onEdit={patch => {
         if (selectedId) commit(editNote(workspace, selectedId, patch, new Date().toISOString()))
       }} />}
