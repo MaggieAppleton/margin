@@ -28,3 +28,18 @@ export function deleteNote(state: Workspace, id: string): Workspace {
     viewEvents: state.viewEvents.filter(event => event.noteId !== id),
   }
 }
+
+export function archiveNote(state: Workspace, id: string, at: string): Workspace {
+  return { ...state, notes: state.notes.map(note => note.id === id ? { ...note, archivedAt: at } : note) }
+}
+
+export function unarchiveNote(state: Workspace, id: string): Workspace {
+  return {
+    ...state,
+    notes: state.notes.map(note => {
+      if (note.id !== id) return note
+      const { archivedAt: _archivedAt, ...rest } = note
+      return rest
+    }),
+  }
+}

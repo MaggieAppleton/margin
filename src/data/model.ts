@@ -6,6 +6,7 @@ export interface Note {
   updatedAt: string
   lastViewedAt: string
   tags: string[]
+  archivedAt?: string
 }
 
 export interface ViewEvent { noteId: string; viewedAt: string }
