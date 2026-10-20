@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ChevronLeft, FileText, MoreHorizontal, Trash2 } from 'lucide-react'
+import { Archive, ArchiveRestore, ChevronLeft, FileText, MoreHorizontal, Trash2 } from 'lucide-react'
 import type { Note } from '../data/model'
 import { fullDate, relativeDate } from '../lib/dates'
 import { Button } from './ui/button'
@@ -12,11 +12,13 @@ interface Props {
   error: string | null
   onEdit: (patch: { title?: string; body?: string }) => void
   onDelete: () => void
+  onArchive: () => void
+  onUnarchive: () => void
   onBack: () => void
   onNew: () => void
 }
 
-export function NoteEditor({ note, error, onEdit, onDelete, onBack, onNew }: Props) {
+export function NoteEditor({ note, error, onEdit, onDelete, onArchive, onUnarchive, onBack, onNew }: Props) {
   const [confirming, setConfirming] = useState(false)
   if (!note) return <main className="editor empty-editor"><FileText size={20} strokeWidth={1.75} aria-hidden="true" /><p className="empty-title">No notes yet</p><Button className="primary-button" onClick={onNew}>New note</Button></main>
   const words = note.body.trim() ? note.body.trim().split(/\s+/).length : 0
@@ -25,12 +27,16 @@ export function NoteEditor({ note, error, onEdit, onDelete, onBack, onNew }: Pro
     <header className="editor-toolbar">
       <Button className="back-button" variant="ghost" onClick={onBack}><ChevronLeft />Notes</Button>
       <div className="toolbar-end">
+        {note.archivedAt && <span className="meta archived-state">Archived</span>}
         <span className="meta">Edited {relativeDate(note.updatedAt)}</span>
         <span className="meta">{words} {words === 1 ? 'word' : 'words'}</span>
         {error ? <span className="save-state">Not saved</span> : <span className="sr-only" role="status">Saved locally</span>}
         <DropdownMenu>
           <DropdownMenuTrigger asChild><Button variant="ghost" size="icon" className="more-button" aria-label="More actions"><MoreHorizontal /></Button></DropdownMenuTrigger>
           <DropdownMenuContent className="menu" align="end">
+            {note.archivedAt
+              ? <DropdownMenuItem className="menu-item menu-item-plain" onSelect={onUnarchive}><ArchiveRestore />Unarchive</DropdownMenuItem>
+              : <DropdownMenuItem className="menu-item menu-item-plain" onSelect={onArchive}><Archive />Archive</DropdownMenuItem>}
             <DropdownMenuItem className="menu-item" onSelect={() => setConfirming(true)}><Trash2 />Delete note…</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

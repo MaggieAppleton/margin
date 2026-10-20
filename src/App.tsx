@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { flushSync } from 'react-dom'
 import type { Workspace } from './data/model'
-import { createNote, deleteNote, editNote, openNote } from './data/notes'
+import { archiveNote, createNote, deleteNote, editNote, openNote, unarchiveNote } from './data/notes'
 import { saveWorkspace } from './data/storage'
 import { NoteList } from './components/NoteList'
 import { NoteEditor } from './components/NoteEditor'
@@ -53,21 +53,30 @@ export function App({ initial, initialId, initialError }: { initial: Workspace; 
   function remove() {
     if (!selectedId) return
     let next = deleteNote(workspace, selectedId)
-    const nextId = [...next.notes].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))[0]?.id ?? null
+    const nextId = [...next.notes].filter(note => !note.archivedAt).sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))[0]?.id ?? null
     if (nextId) next = openNote(next, nextId, new Date().toISOString())
     commit(next)
     setSelectedId(nextId)
     if (!nextId) setMobileEditor(false)
   }
 
+  function archive() {
+    if (selectedId) commit(archiveNote(workspace, selectedId, new Date().toISOString()))
+  }
+
+  function unarchive() {
+    if (selectedId) commit(unarchiveNote(workspace, selectedId))
+  }
+
   const needle = query.toLocaleLowerCase().trim()
-  const visible = workspace.notes.filter(note => !needle || `${note.title}\n${note.body}\n${note.tags.join(' ')}`.toLocaleLowerCase().includes(needle))
+  const active = workspace.notes.filter(note => !note.archivedAt)
+  const visible = (needle ? workspace.notes : active).filter(note => !needle || `${note.title}\n${note.body}\n${note.tags.join(' ')}`.toLocaleLowerCase().includes(needle))
     .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
   const selected = workspace.notes.find(note => note.id === selectedId)
 
   return <div className={`workspace${mobileEditor ? ' show-editor' : ''}`}>
-    <NoteList notes={visible} selectedId={selectedId} query={query} onQuery={setQuery} total={workspace.notes.length} onSelect={select} onNew={add} />
-    <NoteEditor note={selected} error={error} onBack={() => setMobileEditor(false)} onNew={add} onDelete={remove} onEdit={patch => {
+    <NoteList notes={visible} selectedId={selectedId} query={query} onQuery={setQuery} total={active.length} onSelect={select} onNew={add} />
+    <NoteEditor note={selected} error={error} onBack={() => setMobileEditor(false)} onNew={add} onDelete={remove} onArchive={archive} onUnarchive={unarchive} onEdit={patch => {
       if (selectedId) commit(editNote(workspace, selectedId, patch, new Date().toISOString()))
     }} />
   </div>

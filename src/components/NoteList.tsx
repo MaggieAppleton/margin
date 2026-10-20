@@ -37,6 +37,7 @@ export function NoteList({ notes, selectedId, query, total, onQuery, onSelect, o
     <nav className="notes-scroll" aria-label="Choose a note">
       {notes.map(note => <button key={note.id} className={`note-row${selectedId === note.id ? ' selected' : ''}`} aria-current={selectedId === note.id ? 'true' : undefined} onClick={() => onSelect(note.id)}>
         <span className="note-row-title">{note.title.trim() || 'Untitled'}</span>
+        {note.archivedAt && <span className="note-row-archived">Archived</span>}
       </button>)}
       {!notes.length && <p className="list-empty">{searching ? `No matches for “${searching}”` : total ? 'No notes' : 'No notes yet'}</p>}
     </nav>
