@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { flushSync } from 'react-dom'
 import type { Workspace } from './data/model'
-import { archiveNote, createNote, deleteNote, editNote, openNote, unarchiveNote } from './data/notes'
+import { archiveNote, createNote, deleteNote, editNote, keepNote, openNote, unarchiveNote } from './data/notes'
 import { saveWorkspace } from './data/storage'
 import { pickToday, todayNotes } from './data/today'
 import { NoteList } from './components/NoteList'
@@ -62,19 +62,38 @@ export function App({ initial, initialId, initialError }: { initial: Workspace; 
     setMobileEditor(true)
   }
 
+  function leave(next: Workspace, id: string) {
+    if (id !== selectedId) {
+      commit(next)
+      return selectedId
+    }
+    const nextId = [...next.notes].filter(note => !note.archivedAt).sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))[0]?.id ?? null
+    commit(nextId ? openNote(next, nextId, new Date().toISOString()) : next)
+    setSelectedId(nextId)
+    return nextId
+  }
+
   function remove() {
     if (!selectedId) return
-    let next = deleteNote(workspace, selectedId)
-    const nextId = [...next.notes].filter(note => !note.archivedAt).sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))[0]?.id ?? null
-    if (nextId) next = openNote(next, nextId, new Date().toISOString())
-    commit(next)
-    setSelectedId(nextId)
+    const nextId = leave(deleteNote(workspace, selectedId), selectedId)
     setView('note')
     if (!nextId) setMobileEditor(false)
   }
 
   function archive() {
     if (selectedId) commit(archiveNote(workspace, selectedId, new Date().toISOString()))
+  }
+
+  function archiveFromToday(id: string) {
+    leave(archiveNote(workspace, id, new Date().toISOString()), id)
+  }
+
+  function keepFromToday(id: string) {
+    commit(keepNote(workspace, id, new Date().toISOString()))
+  }
+
+  function deleteFromToday(id: string) {
+    leave(deleteNote(workspace, id), id)
   }
 
   function unarchive() {
@@ -90,7 +109,7 @@ export function App({ initial, initialId, initialError }: { initial: Workspace; 
   return <div className={`workspace${mobileEditor ? ' show-editor' : ''}`}>
     <NoteList notes={visible} selectedId={view === 'note' ? selectedId : null} todayActive={view === 'today'} onToday={showToday} query={query} onQuery={setQuery} total={active.length} onSelect={select} onNew={add} />
     {view === 'today'
-      ? <TodayPage notes={todayNotes(workspace, new Date())} onOpen={select} onBack={() => setMobileEditor(false)} />
+      ? <TodayPage notes={todayNotes(workspace, new Date())} onOpen={select} onArchive={archiveFromToday} onKeep={keepFromToday} onDelete={deleteFromToday} onBack={() => setMobileEditor(false)} />
       : <NoteEditor note={selected} error={error} onBack={() => setMobileEditor(false)} onNew={add} onDelete={remove} onArchive={archive} onUnarchive={unarchive} onEdit={patch => {
         if (selectedId) commit(editNote(workspace, selectedId, patch, new Date().toISOString()))
       }} />}
