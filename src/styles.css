@@ -131,6 +131,7 @@ button:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 1p
 .note-row:hover { background: var(--color-sidebar-hover); }
 .note-row.selected { background: var(--color-sidebar-selected); }
 .note-row-title { display: block; min-width: 0; overflow: hidden; font-size: var(--text-base); line-height: var(--text-base--line-height); font-weight: 450; text-overflow: ellipsis; white-space: nowrap; }
+.note-row-archived { display: block; font-size: var(--text-sm); line-height: var(--text-sm--line-height); color: var(--color-sidebar-text-tertiary); }
 .note-row.selected .note-row-title { font-weight: 500; }
 .today-row { display: flex; align-items: center; gap: 0.5rem; width: auto; margin: 0 0.5rem 0.25rem; }
 .today-row svg { flex: none; color: var(--color-sidebar-text-secondary); }
@@ -151,6 +152,7 @@ button:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 1p
 .back-button:focus-visible, .more-button:focus-visible, .primary-button:focus-visible, .danger-button:focus-visible, [data-slot="alert-dialog-cancel"]:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 1px; box-shadow: none; }
 .menu { min-width: 10rem; padding: 0.25rem; border-radius: var(--radius-lg); background: var(--color-surface); box-shadow: var(--shadow-popover); animation: fade var(--duration-fast) var(--ease-out); }
 .menu-item { display: flex; align-items: center; gap: 0.5rem; height: 1.75rem; padding: 0 0.5rem; border-radius: var(--radius-md); color: var(--color-danger); font-size: var(--text-base); line-height: 1; font-weight: 500; cursor: pointer; outline: none; transition: background-color var(--duration-fast) var(--ease-out); }
+.menu-item-plain { color: var(--color-text); }
 .menu-item svg { width: 0.875rem; height: 0.875rem; stroke-width: 1.75; }
 .menu-item[data-highlighted] { background: var(--color-hover); }
 .editor-scroll { overflow-y: auto; flex: 1; min-height: 0; }
