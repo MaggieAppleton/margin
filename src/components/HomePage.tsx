@@ -14,33 +14,33 @@ interface Props {
   onBack: () => void
 }
 
-export function TodayPage({ notes, onOpen, onArchive, onKeep, onDelete, onBack }: Props) {
+export function HomePage({ notes, onOpen, onArchive, onKeep, onDelete, onBack }: Props) {
   const [deleting, setDeleting] = useState<Note | null>(null)
-  return <main className="editor today" aria-label="Today">
+  return <main className="editor home" aria-label="Home">
     <header className="editor-toolbar">
       <Button className="back-button" variant="ghost" onClick={onBack}><ChevronLeft />Notes</Button>
     </header>
     <div className="editor-scroll">
-      <div className="today-page">
-        <header className="today-header">
-          <h2>Today</h2>
-          <p className="meta">{notes.length ? `${notes.length} ${notes.length === 1 ? 'note' : 'notes'} to revisit` : 'Nothing to revisit today'}</p>
+      <div className="home-page">
+        <header className="home-header">
+          <h2>Home</h2>
+          <p className="meta">{notes.length ? `${notes.length} ${notes.length === 1 ? 'note' : 'notes'} to revisit` : 'Nothing to revisit right now'}</p>
         </header>
         {notes.length > 0
-          ? <ul className="today-list">
-            {notes.map(note => <li key={note.id} className="today-card">
+          ? <ul className="home-list">
+            {notes.map(note => <li key={note.id} className="home-card">
               <span className="meta">Edited {relativeDate(note.updatedAt)}</span>
-              <h3 className="today-card-title">{note.title.trim() || 'Untitled'}</h3>
-              {note.body.trim() && <p className="today-card-body">{note.body.trim()}</p>}
-              <div className="today-actions">
-                <Button className="today-action" variant="ghost" onClick={() => onOpen(note.id)}>Open</Button>
-                <Button className="today-action" variant="ghost" onClick={() => onKeep(note.id)}>Keep</Button>
-                <Button className="today-action" variant="ghost" onClick={() => onArchive(note.id)}>Archive</Button>
-                <Button className="today-action today-action-danger" variant="ghost" onClick={() => setDeleting(note)}>Delete…</Button>
+              <h3 className="home-card-title">{note.title.trim() || 'Untitled'}</h3>
+              {note.body.trim() && <p className="home-card-body">{note.body.trim()}</p>}
+              <div className="home-actions">
+                <Button className="home-action" variant="ghost" onClick={() => onOpen(note.id)}>Open</Button>
+                <Button className="home-action" variant="ghost" onClick={() => onKeep(note.id)}>Keep</Button>
+                <Button className="home-action" variant="ghost" onClick={() => onArchive(note.id)}>Archive</Button>
+                <Button className="home-action home-action-danger" variant="ghost" onClick={() => setDeleting(note)}>Delete…</Button>
               </div>
             </li>)}
           </ul>
-          : <p className="today-empty">Notes you haven’t seen in a while will show up here. Check back tomorrow.</p>}
+          : <p className="home-empty">Notes you haven’t seen in a while will show up here.</p>}
       </div>
     </div>
     <AlertDialog open={!!deleting} onOpenChange={open => { if (!open) setDeleting(null) }}>
