@@ -13,7 +13,7 @@ try {
   let initial = readWorkspace(localStorage, url.searchParams.has('reset'))
   url.searchParams.delete('reset')
   history.replaceState(null, '', url)
-  const initialId = [...initial.notes].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))[0]?.id ?? null
+  const initialId = [...initial.notes].filter(note => !note.archivedAt).sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))[0]?.id ?? null
   let initialError: string | null = null
   if (initialId && matchMedia('(min-width: 701px)').matches) {
     initial = openNote(initial, initialId, new Date().toISOString())
