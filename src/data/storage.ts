@@ -12,6 +12,7 @@ function isWorkspace(value: unknown): value is Workspace {
     && state.notes.every(note => note && typeof note.id === 'string'
       && typeof note.title === 'string' && typeof note.body === 'string'
       && timestamp(note.createdAt) && timestamp(note.updatedAt) && timestamp(note.lastViewedAt)
+      && (note.archivedAt === undefined || timestamp(note.archivedAt))
       && Array.isArray(note.tags) && note.tags.every(tag => typeof tag === 'string'))
     && state.viewEvents.every(event => event && typeof event.noteId === 'string' && timestamp(event.viewedAt))
 }
