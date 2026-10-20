@@ -43,3 +43,7 @@ export function unarchiveNote(state: Workspace, id: string): Workspace {
     }),
   }
 }
+
+export function keepNote(state: Workspace, id: string, at: string): Workspace {
+  return { ...state, notes: state.notes.map(note => note.id === id ? { ...note, reviewedAt: at } : note) }
+}

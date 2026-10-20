@@ -7,6 +7,7 @@ export interface Note {
   lastViewedAt: string
   tags: string[]
   archivedAt?: string
+  reviewedAt?: string
 }
 
 export interface ViewEvent { noteId: string; viewedAt: string }
@@ -15,6 +16,7 @@ export interface Workspace {
   version: 1
   notes: Note[]
   viewEvents: ViewEvent[]
+  today?: { day: string; noteIds: string[] }
 }
 
 export interface SeedFixture {
