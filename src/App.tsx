@@ -5,8 +5,9 @@ import { saveWorkspace } from './data/storage'
 import { NoteList } from './components/NoteList'
 import { NoteEditor } from './components/NoteEditor'
 import { Home } from './components/Home'
+import { selectResurfacedNotes } from './data/resurfacing'
 
-type NoteOrigin = 'home' | 'list'
+export type NoteOrigin = 'home' | 'list' | 'resurfacing'
 
 const recentLimit = 8
 
@@ -68,9 +69,9 @@ export function App({ initial }: { initial: Workspace }) {
   return <div className={`workspace${mobileList ? ' show-list' : ''}`}>
     <NoteList notes={visible} selectedId={selectedId} query={query} onQuery={setQuery} total={workspace.notes.length} home={!selected} onHome={goHome} onSelect={id => select(id, 'list')} onNew={add} />
     {selected
-      ? <NoteEditor note={selected} error={error} backLabel={origin === 'list' ? 'All notes' : 'Home'} onBack={back} onDelete={remove} onEdit={patch => {
+      ? <NoteEditor note={selected} origin={origin} error={error} backLabel={origin === 'list' ? 'All notes' : 'Home'} onBack={back} onDelete={remove} onEdit={patch => {
           if (selectedId) commit(editNote(workspace, selectedId, patch, new Date().toISOString()))
         }} />
-      : <Home recent={byEdit.slice(0, recentLimit)} error={error} onOpen={id => select(id, 'home')} onNew={add} onAllNotes={() => setMobileList(true)} />}
+      : <Home resurfaced={selectResurfacedNotes(workspace.notes, new Date())} recent={byEdit.slice(0, recentLimit)} error={error} onOpen={id => select(id, 'home')} onOpenResurfaced={id => select(id, 'resurfacing')} onNew={add} onAllNotes={() => setMobileList(true)} />}
   </div>
 }
