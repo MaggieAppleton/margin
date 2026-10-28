@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 import type { Note } from '../src/data/model.ts'
-import { applyRating, dailyResurfacingLimit, dueAt, minimumEaseFactor, provisionalJoinDelayDays, ratingGrades, selectResurfacedNotes } from '../src/data/resurfacing.ts'
+import { applyRating, dailyResurfacingLimit, rateNote, dueAt, minimumEaseFactor, provisionalJoinDelayDays, ratingGrades, selectResurfacedNotes } from '../src/data/resurfacing.ts'
 
 const dayMs = 86400000
 const today = new Date(2026, 9, 28, 9, 0)
@@ -75,4 +75,15 @@ test('selection is stable through the day and rating does not pull in a sixth no
   assert.equal(after.length, 5)
   assert.deepEqual([...after].sort(), [...morning].sort())
   assert.equal(after[0], morning[0])
+})
+
+test('rating a note saves its schedule once per resurfacing day', () => {
+  const state = { version: 2 as const, notes: [note('a', 20), note('b', 30)], viewEvents: [] }
+  const rated = rateNote(state, 'a', 'familiar', today)
+  const review = rated.notes.find(n => n.id === 'a')!.review!
+  assert.equal(review.lastRating, 'familiar')
+  assert.equal(review.dueAt, daysFrom(today, 1))
+  assert.equal(rated.notes.find(n => n.id === 'b')!.review, undefined)
+  assert.equal(rateNote(rated, 'a', 'fresh', new Date(2026, 9, 28, 20)), rated)
+  assert.notEqual(rateNote(rated, 'a', 'fresh', new Date(2026, 9, 29, 9)), rated)
 })

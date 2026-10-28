@@ -1,4 +1,4 @@
-import type { Note, ReviewState } from './model.ts'
+import type { Note, ReviewState, Workspace } from './model.ts'
 
 const dayMs = 86400000
 
@@ -56,4 +56,11 @@ export function selectResurfacedNotes(notes: Note[], day: Date): Note[] {
   const due = notes.filter(note => !reviewedOn(note, day) && Date.parse(dueAt(note)) < end)
     .sort((a, b) => Date.parse(dueAt(a)) - Date.parse(dueAt(b)) || byId(a, b))
   return [...reviewed, ...due].slice(0, dailyResurfacingLimit)
+}
+
+export function rateNote(state: Workspace, id: string, rating: Rating, at: Date): Workspace {
+  const note = state.notes.find(candidate => candidate.id === id)
+  if (!note || reviewedOn(note, at)) return state
+  const review = applyRating(note.review, rating, at.toISOString())
+  return { ...state, notes: state.notes.map(candidate => candidate.id === id ? { ...candidate, review } : candidate) }
 }

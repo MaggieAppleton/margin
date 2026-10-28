@@ -1,6 +1,7 @@
-import { List, Plus } from 'lucide-react'
+import { Check, List, Plus } from 'lucide-react'
 import type { Note } from '../data/model'
 import { relativeDate } from '../lib/dates'
+import { reviewedOn } from '../data/resurfacing'
 import { Button } from './ui/button'
 
 interface Props {
@@ -27,12 +28,13 @@ function since(date: string) {
 
 function ResurfacedCard({ note, onOpen }: { note: Note; onOpen: () => void }) {
   const when = note.review ? `Resurfaced ${since(note.review.lastReviewedAt)}` : `Created ${since(note.createdAt)}`
+  const reviewed = reviewedOn(note, new Date())
   return <li>
-    <button className="resurfaced-card" onClick={onOpen}>
+    <button className={`resurfaced-card${reviewed ? ' reviewed' : ''}`} onClick={onOpen}>
       <span className="resurfaced-title">{note.title.trim() || 'Untitled note'}</span>
       {note.body.trim() && <span className="resurfaced-excerpt">{excerpt(note.body)}</span>}
       <span className="resurfaced-meta">
-        <time dateTime={note.review?.lastReviewedAt ?? note.createdAt}>{when}</time>
+        {reviewed ? <span className="reviewed-mark"><Check size={12} aria-hidden="true" />Reviewed today</span> : <time dateTime={note.review?.lastReviewedAt ?? note.createdAt}>{when}</time>}
         {note.tags.map(tag => <span key={tag} className="resurfaced-tag">{tag}</span>)}
       </span>
     </button>
