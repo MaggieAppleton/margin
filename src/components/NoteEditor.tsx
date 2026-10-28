@@ -1,5 +1,6 @@
 import { ArrowLeft, Check, Trash2 } from 'lucide-react'
 import type { Note } from '../data/model'
+import { ratings, reviewedOn, type Rating } from '../data/resurfacing'
 import type { NoteOrigin } from '../App'
 import { fullDate } from '../lib/dates'
 import { Button } from './ui/button'
@@ -14,9 +15,22 @@ interface Props {
   onEdit: (patch: { title?: string; body?: string }) => void
   onDelete: () => void
   onBack: () => void
+  onRate: (rating: Rating) => void
 }
 
-export function NoteEditor({ note, origin, backLabel, error, onEdit, onDelete, onBack }: Props) {
+const ratingLabels: Record<Rating, string> = { faded: 'Faded', familiar: 'Familiar', fresh: 'Fresh' }
+
+function RatingBar({ note, onRate }: { note: Note; onRate: (rating: Rating) => void }) {
+  const reviewedToday = reviewedOn(note, new Date())
+  const chosen = reviewedToday ? note.review?.lastRating : undefined
+  const days = note.review?.intervalDays ?? 0
+  return <div className="rating-bar" role="group" aria-labelledby="rating-prompt">
+    <span id="rating-prompt" className="rating-prompt" aria-live="polite">{reviewedToday ? `Back in ${days} ${days === 1 ? 'day' : 'days'}` : 'How does this note feel now?'}</span>
+    <span className="rating-buttons">{ratings.map(rating => <Button key={rating} variant="ghost" size="sm" className={`rating-button${chosen === rating ? ' chosen' : ''}`} aria-pressed={chosen === rating} disabled={reviewedToday} onClick={() => onRate(rating)}>{ratingLabels[rating]}</Button>)}</span>
+  </div>
+}
+
+export function NoteEditor({ note, origin, backLabel, error, onEdit, onDelete, onBack, onRate }: Props) {
   const words = note.body.trim() ? note.body.trim().split(/\s+/).length : 0
   return <main className="editor" aria-label="Note editor" data-origin={origin}>
     <header className="editor-toolbar">
@@ -39,6 +53,7 @@ export function NoteEditor({ note, origin, backLabel, error, onEdit, onDelete, o
         <Textarea className="note-body" aria-label="Note body" placeholder="Begin anywhere…" value={note.body} onChange={event => onEdit({ body: event.target.value })} />
       </article>
     </div>
+    {origin === 'resurfacing' && <RatingBar note={note} onRate={onRate} />}
     <footer className="editor-footer"><span className={error ? 'unsaved' : 'saved'}>{!error && <Check size={14} aria-hidden="true" />}{error ? 'Changes not saved' : 'Saved locally'}</span><span>{words} {words === 1 ? 'word' : 'words'}</span></footer>
   </main>
 }
