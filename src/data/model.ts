@@ -15,6 +15,7 @@ export interface ReviewState {
   repetitions: number
   dueAt: string
   lastReviewedAt: string
+  lastRating?: 'faded' | 'familiar' | 'fresh'
 }
 
 export interface ViewEvent { noteId: string; viewedAt: string }
