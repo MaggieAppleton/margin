@@ -11,6 +11,7 @@ function isReview(value: unknown): value is ReviewState {
   const count = (number: unknown) => typeof number === 'number' && Number.isFinite(number) && number >= 0
   return count(review.easeFactor) && count(review.intervalDays) && count(review.repetitions)
     && date(review.dueAt) && date(review.lastReviewedAt)
+    && (review.lastRating === undefined || ['faded', 'familiar', 'fresh'].includes(review.lastRating))
 }
 
 function isWorkspace(value: unknown): value is Omit<Workspace, 'version'> & { version: number } {
