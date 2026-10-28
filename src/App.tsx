@@ -4,13 +4,19 @@ import { createNote, deleteNote, editNote, openNote } from './data/notes'
 import { saveWorkspace } from './data/storage'
 import { NoteList } from './components/NoteList'
 import { NoteEditor } from './components/NoteEditor'
+import { Home } from './components/Home'
 
-export function App({ initial, initialId, initialError }: { initial: Workspace; initialId: string | null; initialError: string | null }) {
+type NoteOrigin = 'home' | 'list'
+
+const recentLimit = 8
+
+export function App({ initial }: { initial: Workspace }) {
   const [workspace, setWorkspace] = useState(initial)
-  const [selectedId, setSelectedId] = useState(initialId)
+  const [selectedId, setSelectedId] = useState<string | null>(null)
+  const [origin, setOrigin] = useState<NoteOrigin>('home')
   const [query, setQuery] = useState('')
-  const [error, setError] = useState(initialError)
-  const [mobileEditor, setMobileEditor] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [mobileList, setMobileList] = useState(false)
 
   function commit(next: Workspace) {
     setWorkspace(next)
@@ -22,39 +28,49 @@ export function App({ initial, initialId, initialError }: { initial: Workspace; 
     }
   }
 
-  function select(id: string) {
+  function select(id: string, from: NoteOrigin) {
     commit(openNote(workspace, id, new Date().toISOString()))
     setSelectedId(id)
-    setMobileEditor(true)
+    setOrigin(from)
+    setMobileList(false)
   }
 
   function add() {
     const id = crypto.randomUUID()
     commit(createNote(workspace, id, new Date().toISOString()))
     setSelectedId(id)
+    setOrigin(mobileList ? 'list' : 'home')
     setQuery('')
-    setMobileEditor(true)
+    setMobileList(false)
+  }
+
+  function goHome() {
+    setSelectedId(null)
+    setMobileList(false)
+  }
+
+  function back() {
+    setSelectedId(null)
+    setMobileList(origin === 'list')
   }
 
   function remove() {
     if (!selectedId) return
-    let next = deleteNote(workspace, selectedId)
-    const nextId = [...next.notes].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))[0]?.id ?? null
-    if (nextId) next = openNote(next, nextId, new Date().toISOString())
-    commit(next)
-    setSelectedId(nextId)
-    if (!nextId) setMobileEditor(false)
+    commit(deleteNote(workspace, selectedId))
+    goHome()
   }
 
   const needle = query.toLocaleLowerCase().trim()
-  const visible = workspace.notes.filter(note => !needle || `${note.title}\n${note.body}\n${note.tags.join(' ')}`.toLocaleLowerCase().includes(needle))
-    .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
+  const byEdit = [...workspace.notes].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
+  const visible = byEdit.filter(note => !needle || `${note.title}\n${note.body}\n${note.tags.join(' ')}`.toLocaleLowerCase().includes(needle))
   const selected = workspace.notes.find(note => note.id === selectedId)
 
-  return <div className={`workspace${mobileEditor ? ' show-editor' : ''}`}>
-    <NoteList notes={visible} selectedId={selectedId} query={query} onQuery={setQuery} total={workspace.notes.length} onSelect={select} onNew={add} />
-    <NoteEditor note={selected} error={error} onBack={() => setMobileEditor(false)} onNew={add} onDelete={remove} onEdit={patch => {
-      if (selectedId) commit(editNote(workspace, selectedId, patch, new Date().toISOString()))
-    }} />
+  return <div className={`workspace${mobileList ? ' show-list' : ''}`}>
+    <NoteList notes={visible} selectedId={selectedId} query={query} onQuery={setQuery} total={workspace.notes.length} home={!selected} onHome={goHome} onSelect={id => select(id, 'list')} onNew={add} />
+    {selected
+      ? <NoteEditor note={selected} error={error} backLabel={origin === 'list' ? 'All notes' : 'Home'} onBack={back} onDelete={remove} onEdit={patch => {
+          if (selectedId) commit(editNote(workspace, selectedId, patch, new Date().toISOString()))
+        }} />
+      : <Home recent={byEdit.slice(0, recentLimit)} error={error} onOpen={id => select(id, 'home')} onNew={add} onAllNotes={() => setMobileList(true)} />}
   </div>
 }
