@@ -4,7 +4,7 @@ import type { Workspace } from './model.ts'
 export function createSeedWorkspace(now = new Date()): Workspace {
   const at = (daysAgo: number) => new Date(+now - daysAgo * 86400000).toISOString()
   return {
-    version: 1,
+    version: 2,
     notes: seedFixtures.map(fixture => ({
       id: fixture.id, title: fixture.title, body: fixture.body, tags: [...fixture.tags],
       createdAt: at(fixture.createdDaysAgo),

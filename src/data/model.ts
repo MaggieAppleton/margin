@@ -6,12 +6,21 @@ export interface Note {
   updatedAt: string
   lastViewedAt: string
   tags: string[]
+  review?: ReviewState
+}
+
+export interface ReviewState {
+  easeFactor: number
+  intervalDays: number
+  repetitions: number
+  dueAt: string
+  lastReviewedAt: string
 }
 
 export interface ViewEvent { noteId: string; viewedAt: string }
 
 export interface Workspace {
-  version: 1
+  version: 2
   notes: Note[]
   viewEvents: ViewEvent[]
 }
