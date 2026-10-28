@@ -1,5 +1,6 @@
 import { ArrowLeft, Check, Trash2 } from 'lucide-react'
 import type { Note } from '../data/model'
+import type { NoteOrigin } from '../App'
 import { fullDate } from '../lib/dates'
 import { Button } from './ui/button'
 import { Textarea } from './ui/textarea'
@@ -7,6 +8,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 
 interface Props {
   note: Note
+  origin: NoteOrigin
   backLabel: string
   error: string | null
   onEdit: (patch: { title?: string; body?: string }) => void
@@ -14,12 +16,12 @@ interface Props {
   onBack: () => void
 }
 
-export function NoteEditor({ note, backLabel, error, onEdit, onDelete, onBack }: Props) {
+export function NoteEditor({ note, origin, backLabel, error, onEdit, onDelete, onBack }: Props) {
   const words = note.body.trim() ? note.body.trim().split(/\s+/).length : 0
-  return <main className="editor" aria-label="Note editor">
+  return <main className="editor" aria-label="Note editor" data-origin={origin}>
     <header className="editor-toolbar">
       <Button className="back-button" variant="ghost" onClick={onBack}><ArrowLeft />{backLabel}</Button>
-      <span className="editor-context">Notes <span aria-hidden="true">/</span> <span>{note.title.trim() || 'Untitled note'}</span></span>
+      <span className="editor-context">{origin === 'resurfacing' ? 'Resurfaced today' : 'Notes'} <span aria-hidden="true">/</span> <span>{note.title.trim() || 'Untitled note'}</span></span>
       <AlertDialog>
         <AlertDialogTrigger asChild><Button variant="ghost" size="icon" className="delete-note" aria-label="Delete note" title="Delete note"><Trash2 size={17} /></Button></AlertDialogTrigger>
         <AlertDialogContent>
