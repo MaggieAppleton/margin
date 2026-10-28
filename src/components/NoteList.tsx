@@ -8,16 +8,18 @@ interface Props {
   selectedId: string | null
   query: string
   total: number
+  home: boolean
+  onHome: () => void
   onQuery: (query: string) => void
   onSelect: (id: string) => void
   onNew: () => void
 }
 
-export function NoteList({ notes, selectedId, query, total, onQuery, onSelect, onNew }: Props) {
+export function NoteList({ notes, selectedId, query, total, home, onHome, onQuery, onSelect, onNew }: Props) {
   const searching = query.trim()
   return <aside className="sidebar" aria-label="Notes">
     <header className="sidebar-header">
-      <h1>Margin</h1>
+      <h1><button className={`home-link${home ? ' current' : ''}`} aria-current={home ? 'page' : undefined} onClick={onHome}>Margin</button></h1>
       <Button className="new-note" size="icon" variant="ghost" aria-label="New note" title="New note" onClick={onNew}><Plus /></Button>
     </header>
     <div className="search">

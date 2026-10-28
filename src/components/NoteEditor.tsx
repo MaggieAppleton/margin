@@ -1,4 +1,4 @@
-import { ArrowLeft, Check, FileText, Trash2 } from 'lucide-react'
+import { ArrowLeft, Check, Trash2 } from 'lucide-react'
 import type { Note } from '../data/model'
 import { fullDate } from '../lib/dates'
 import { Button } from './ui/button'
@@ -6,20 +6,19 @@ import { Textarea } from './ui/textarea'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from './ui/alert-dialog'
 
 interface Props {
-  note: Note | undefined
+  note: Note
+  backLabel: string
   error: string | null
   onEdit: (patch: { title?: string; body?: string }) => void
   onDelete: () => void
   onBack: () => void
-  onNew: () => void
 }
 
-export function NoteEditor({ note, error, onEdit, onDelete, onBack, onNew }: Props) {
-  if (!note) return <main className="editor empty-editor"><FileText size={30} strokeWidth={1} aria-hidden="true" /><h2>A place for a thought.</h2><p>Start a note. See where it takes you.</p><Button onClick={onNew}>New note</Button></main>
+export function NoteEditor({ note, backLabel, error, onEdit, onDelete, onBack }: Props) {
   const words = note.body.trim() ? note.body.trim().split(/\s+/).length : 0
   return <main className="editor" aria-label="Note editor">
     <header className="editor-toolbar">
-      <Button className="back-button" variant="ghost" onClick={onBack}><ArrowLeft />All notes</Button>
+      <Button className="back-button" variant="ghost" onClick={onBack}><ArrowLeft />{backLabel}</Button>
       <span className="editor-context">Notes <span aria-hidden="true">/</span> <span>{note.title.trim() || 'Untitled note'}</span></span>
       <AlertDialog>
         <AlertDialogTrigger asChild><Button variant="ghost" size="icon" className="delete-note" aria-label="Delete note" title="Delete note"><Trash2 size={17} /></Button></AlertDialogTrigger>

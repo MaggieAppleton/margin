@@ -98,7 +98,10 @@ button:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 1p
 /* Sidebar */
 .sidebar { display: flex; min-height: 0; flex-direction: column; background: var(--color-sidebar); color: var(--color-sidebar-text); border-right: 1px solid var(--color-sidebar-border); }
 .sidebar-header { display: flex; flex: none; align-items: center; justify-content: space-between; height: 2.75rem; padding: 0 0.5rem 0 1.125rem; }
-.sidebar-header h1 { margin: 0; font-size: var(--text-base); line-height: var(--text-base--line-height); font-weight: 600; letter-spacing: -0.01em; }
+.sidebar-header h1 { margin: 0 0 0 -0.5rem; font-size: var(--text-base); line-height: var(--text-base--line-height); font-weight: 600; letter-spacing: -0.01em; }
+.home-link { padding: 0.125rem 0.5rem; border: 0; border-radius: var(--radius-md); background: transparent; color: var(--color-sidebar-text); font-weight: inherit; letter-spacing: inherit; transition: background-color var(--duration-fast) var(--ease-out); }
+.home-link:hover { background: var(--color-sidebar-hover); }
+.home-link.current { background: var(--color-sidebar-selected); }
 .sidebar .new-note { width: 1.75rem; height: 1.75rem; padding: 0; border-radius: var(--radius-md); color: var(--color-sidebar-text-secondary); transition: background-color var(--duration-fast) var(--ease-out); }
 .sidebar .new-note:hover { background: var(--color-sidebar-hover); color: var(--color-sidebar-text); }
 .sidebar .new-note:focus-visible, .sidebar .clear-search:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 1px; box-shadow: none; }
@@ -162,6 +165,21 @@ button:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 1p
 .empty-editor { align-items: center; justify-content: center; gap: 16px; color: #7e8770; padding: 30px; text-align: center; }
 .empty-editor h2 { font: 28px var(--font-serif); color: #4b5540; margin: 0; }
 .empty-editor p { font-size: 14px; margin: 0 0 8px; }
+.home { min-width: 0; min-height: 0; display: flex; flex-direction: column; background: #faf9f6; }
+.home-toolbar { display: flex; align-items: center; justify-content: flex-end; gap: 15px; min-height: 77px; padding: 18px 40px; }
+.home-new { color: #657254; }
+.all-notes-button { display: none; margin-right: auto; }
+.home-scroll { overflow-y: auto; flex: 1; scrollbar-width: thin; scrollbar-color: #d4d6ca transparent; }
+.home-page { max-width: 780px; margin: 34px auto 40px; padding: 0 56px; animation: arrive 180ms ease-out; }
+.home-section + .home-section { margin-top: 48px; }
+.home-heading { display: flex; align-items: center; gap: 10px; margin: 0 0 16px; color: #858978; font-size: 11px; font-weight: 500; letter-spacing: .02em; }
+.home-heading::before { content: ""; width: 20px; height: 1px; background: #a2ac8e; }
+.recent-list { list-style: none; margin: 0; padding: 0; }
+.recent-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; width: 100%; padding: 10px 12px; margin: 0 -12px; box-sizing: content-box; border: 0; border-radius: var(--radius-md); background: transparent; text-align: left; transition: background-color var(--duration-fast) var(--ease-out); }
+.recent-row:hover { background: #f1efe8; }
+.recent-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--font-serif); font-size: 17px; color: #333b2c; }
+.recent-date { flex: none; color: #858978; font-size: 11px; }
+.home-empty { margin: 0; color: #858978; font-size: 14px; }
 .recovery { max-width: 600px; margin: 100px auto; padding: 30px; }
 .recovery h1 { font: 32px var(--font-serif); margin-bottom: 24px; }
 .recovery p { font-size: 16px; line-height: 1.7; margin: 16px 0; }
@@ -181,10 +199,13 @@ button:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 1p
 }
 @media (max-width: 700px) {
   .workspace { display: block; }
-  .sidebar { height: 100dvh; }
-  .editor { display: none; height: 100dvh; }
-  .show-editor .sidebar { display: none; }
-  .show-editor .editor { display: flex; }
+  .sidebar { display: none; height: 100dvh; }
+  .editor, .home { height: 100dvh; }
+  .show-list .sidebar { display: flex; }
+  .show-list .editor, .show-list .home { display: none; }
+  .all-notes-button { display: inline-flex; padding-left: 0; color: #657254; }
+  .home-toolbar { padding: 15px 20px; min-height: 64px; }
+  .home-page { padding: 0 28px; margin-top: 18px; }
   .editor-toolbar { padding: 15px 20px; min-height: 64px; }
   .editor-context { display: none; }
   .back-button { display: inline-flex; padding-left: 0; color: #657254; }
